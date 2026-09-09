@@ -16,6 +16,7 @@ use an external `mmproj`.
 - Text generation and text transformation with local GGUF models
 - Optional image input for multimodal llama.cpp models that use `mmproj`,
   including multi-image batches
+- MTP (Multi-Token Prediction)
 - Separate `RESPONSE` and `REASONING` outputs
 - System prompt presets from text files
 - Recursive model discovery from `ComfyUI/models/LLM`
@@ -43,6 +44,8 @@ Notes:
 - Gemma 4 text generation works well. Vision support depends on the specific
   GGUF and `mmproj` release, and can be less reliable on some Windows CUDA
   setups.
+- An MTP file must start with `mtp-`, `mtp_`, `draft-`, or `draft_` so that it
+appears in the `mtp` dropdown and is excluded from the list of standard models.
 - In this node, `gpt-oss` is used as a text model through
   llama.cpp-compatible GGUF releases.
 
@@ -100,8 +103,9 @@ ComfyUI/models/LLM
 Example:
 
 ```text
-ComfyUI/models/LLM/My-Model/model-q4_k_m.gguf
-ComfyUI/models/LLM/My-Model/mmproj-bf16.gguf
+ComfyUI/models/LLM/My-Model/MODEL_NAME-q4_k_m.gguf
+ComfyUI/models/LLM/My-Model/mmproj_MODEL_NAME-bf16.gguf
+ComfyUI/models/LLM/My-Model/mtp-MODEL_NAME.gguf
 ```
 
 The `model` dropdown shows model `.gguf` files. The `mmproj` dropdown shows
@@ -161,8 +165,10 @@ Common Gemma 4 variants:
 
 - `gemma-4-E2B`
 - `gemma-4-E4B`
+- `gemma-4-12b`
 - `gemma-4-26b-a4b`
 - `gemma-4-31b`
+
 
 Gemma 4 supports configurable thinking modes across the family. For simple
 prompt writing, translation, captioning, and extraction, start with
@@ -208,6 +214,7 @@ Reference: [gpt-oss docs](https://github.com/openai/gpt-oss)
 | --- | --- |
 | `model` | GGUF model file from `ComfyUI/models/LLM`. |
 | `mmproj` | Vision projector GGUF. Required when using image input, whether it is one image or a batch. |
+| `mtp` | Is responsible for speculative decoding. |
 | `system_prompt` | Prompt preset from `models/LLM/prompts`, or `none`. |
 | `prompt` | User prompt sent to the selected model. |
 | `max_tokens` | Maximum generated tokens. |
